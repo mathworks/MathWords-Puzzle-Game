@@ -33,8 +33,8 @@ classdef LaunchMathWords < handle
             % Create UIFigure
             app.UIFigure = fig;
             app.UIFigure.Name = "MathWords";
-            app.UIFigure.Units = "normalized";
-            app.UIFigure.Position = [0.1 0.2 0.8 0.6];
+            app.UIFigure.Position = [50 50 1365 575];
+            movegui( app.UIFigure, "center" )
 
             % Setup icons (path below requires R2022a or newer)
             iconPath = fullfile( matlabroot, "ui", "icons", "24x24" );
