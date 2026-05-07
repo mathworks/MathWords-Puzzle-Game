@@ -1,4 +1,4 @@
-# MathWords Puzzle Game
+# MathWords Puzzle Game &nbsp; [![Open in MATLAB Online](https://www.mathworks.com/images/responsive/global/open-in-matlab-online.svg)](https://matlab.mathworks.com/open/github/v1?repo=mathworks/MathWords-Puzzle-Game)
 Play the popular word guessing game with your favorite 5-letter [MATLAB® functions](https://www.mathworks.com/help/matlab/referencelist.html?type=function&listtype=alpha)!
 
 This code demonstrates how to implement a MATLAB® app using the Model-View-Controller (MVC) software architecture pattern. To learn more, please see ["Developing MATLAB Apps Using the Model-View-Controller Pattern"](https://www.mathworks.com/company/technical-articles/developing-matlab-apps-using-the-model-view-controller-pattern.html) on the MathWorks webpage.
