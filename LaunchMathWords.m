@@ -1,7 +1,7 @@
 classdef LaunchMathWords < handle
     % LAUNCHMATHWORDS Launch MathWords application.
     %
-    %  Copyright 2023 The MathWorks, Inc.
+    %  Copyright 2023-2026 The MathWorks, Inc.
 
     properties
         Model (1,1) ModelMathWords
@@ -36,8 +36,7 @@ classdef LaunchMathWords < handle
             app.UIFigure.Position = [50 50 1365 575];
             movegui( app.UIFigure, "center" )
 
-            % Setup icons (path below requires R2022a or newer)
-            iconPath = fullfile( matlabroot, "ui", "icons", "24x24" );
+            % Create app figure icon
             m = 6; % pixels, size of each color square in icon (mxm)
             n = 3*m + 4; % pixels, total size of icon (nxn)
             mask = false( n, n ); % create mask of grid lines and border
@@ -48,6 +47,21 @@ classdef LaunchMathWords < handle
             icon(repmat(mask,1,1,3)) = 0; % add grid lines, set to black
             app.UIFigure.Icon = icon;
 
+            % Setup toolbar icons
+            iconPath = fullfile( matlabroot, "ui", "icons", "24x24" );
+            if isfolder( iconPath ) % should exist for R2022a or newer
+                refreshIcon = fullfile( iconPath, "refresh.svg" );
+                infoIcon = fullfile( iconPath, "info.svg" );
+                hintIcon = fullfile( iconPath, "help.svg" );
+                solvedIcon = fullfile( iconPath, "validated.svg" );
+            else
+                iconPath = fullfile( matlabroot, "toolbox", "matlab", "icons" );
+                refreshIcon = fullfile( iconPath, "tool_rotate_3d.png" );
+                infoIcon = fullfile( iconPath, "help_rn.png" );
+                hintIcon = fullfile( iconPath, "helpicon.gif" );
+                solvedIcon = fullfile( iconPath, "book_link.png" );
+            end
+
             % Create Toolbar
             app.Toolbar = uitoolbar( app.UIFigure );
 
@@ -55,26 +69,26 @@ classdef LaunchMathWords < handle
             app.RefreshButton = uipushtool( app.Toolbar );
             app.RefreshButton.Tooltip = "New MathWord";
             app.RefreshButton.ClickedCallback = @(~,~) refreshPushed( app );
-            app.RefreshButton.Icon = fullfile( iconPath, "refresh.svg" );
+            app.RefreshButton.Icon = refreshIcon;
 
             % Create HowToToggle button
             app.HowToToggle = uitoggletool(app.Toolbar);
             app.HowToToggle.Tooltip = "How to Play";
             app.HowToToggle.ClickedCallback = @(~,~) toggleHowTo( app );
-            app.HowToToggle.Icon = fullfile( iconPath, "info.svg" );
+            app.HowToToggle.Icon = infoIcon;
             app.HowToToggle.State = "on";
 
             % Create HintToggle button
             app.HintToggle = uitoggletool( app.Toolbar );
             app.HintToggle.Tooltip = "Need a hint?";
             app.HintToggle.ClickedCallback = @(~,~) toggleHint( app );
-            app.HintToggle.Icon = fullfile( iconPath, "help.svg" );
+            app.HintToggle.Icon = hintIcon;
 
             % Create SolvedToggle button
             app.SolvedToggle = uitoggletool( app.Toolbar );
             app.SolvedToggle.Tooltip = "Solved Words";
             app.SolvedToggle.ClickedCallback = @(~,~) toggleSolved( app );
-            app.SolvedToggle.Icon = fullfile( iconPath, "validated.svg" );
+            app.SolvedToggle.Icon = solvedIcon;
             app.SolvedToggle.State = "on";
 
             % Create MainLayout grid (HowTo | Guessing | Solved)
@@ -114,13 +128,8 @@ classdef LaunchMathWords < handle
 
         function refreshPushed( app )
             % REFRESHPUSHED Reset app/model to initial state and get new MathWord.
-            app.HowToToggle.State = "on";
             app.HintToggle.State = "off";
-            app.SolvedToggle.State = "on";
-
-            toggleHowTo( app )
             toggleHint( app )
-            toggleSolved( app )
 
             if all( app.Model.Solved )
                 clear( app.SolvedView )
